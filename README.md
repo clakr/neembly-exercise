@@ -9,7 +9,7 @@
   - [ ] Create
   - [x] Read
   - [ ] Update
-  - [ ] Delete
+  - [x] Delete
 
 ## Project Information
 
