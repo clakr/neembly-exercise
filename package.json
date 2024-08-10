@@ -9,10 +9,18 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
-    "lint:fix": "eslint --fix ."
+    "lint:fix": "eslint --fix .",
+    "clean": "rm -rf .nuxt node_modules package-lock.json bun.lockb"
   },
   "dependencies": {
     "nuxt": "^3.12.4",
     "vue": "latest"
+  },
+  "devDependencies": {
+    "@nuxt/eslint": "^0.5.0",
+    "@nuxtjs/tailwindcss": "^6.12.1",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1"
   }
 }

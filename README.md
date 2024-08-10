@@ -2,7 +2,7 @@
 
 ## Functionalities
 
-- [ ] Product Listing
+- [x] Product Listing
 - [ ] Search
 - [ ] Filter
 - [ ] CRUD
