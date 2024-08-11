@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import Textarea from "~/components/Form/Textarea.vue";
-
 const route = useRoute();
 const productId = route.params.id;
 
@@ -67,32 +65,37 @@ async function handleUpdateProduct(event: Event) {
         class="flex flex-col gap-y-3 bg-white rounded border border-slate-200 p-4"
         @submit.prevent="handleUpdateProduct"
       >
-        <Field>
-          <Label for="title">Title</Label>
-          <Input id="title" type="text" name="title" :value="product.title" />
-        </Field>
-        <Field>
-          <Label for="price">Price</Label>
-          <Input
+        <FormField>
+          <FormLabel for="title">Title</FormLabel>
+          <FormInput
+            id="title"
+            v-model="product.title"
+            type="text"
+            name="title"
+          />
+        </FormField>
+        <FormField>
+          <FormLabel for="price">Price</FormLabel>
+          <FormInput
             id="price"
+            v-model="product.price"
             type="number"
             name="price"
             step="0.01"
             min="0.01"
-            :value="product.price"
           />
-        </Field>
-        <Field>
-          <Label for="description">Description</Label>
-          <Textarea
+        </FormField>
+        <FormField>
+          <FormLabel for="description">Description</FormLabel>
+          <FormTextarea
             id="description"
             name="description"
             :value="product.description"
           />
-        </Field>
-        <Field>
-          <Label for="category">Category</Label>
-          <Select id="category" name="category">
+        </FormField>
+        <FormField>
+          <FormLabel for="category">Category</FormLabel>
+          <FormSelect id="category" name="category">
             <option
               v-for="category in categories"
               :key="category"
@@ -101,8 +104,8 @@ async function handleUpdateProduct(event: Event) {
             >
               {{ category }}
             </option>
-          </Select>
-        </Field>
+          </FormSelect>
+        </FormField>
         <button class="bg-slate-800 text-slate-50 py-2 rounded mt-2">
           Update Product
         </button>

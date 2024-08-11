@@ -24,14 +24,22 @@ const {
 const selectedCategories = ref<Category[]>([]);
 
 const filteredProducts = computed(() => {
-  if (selectedCategories.value.length === 0) {
-    return products.value;
-  }
+  if (selectedCategories.value.length === 0) return products.value;
 
   return products.value?.filter((product) =>
     selectedCategories.value.includes(product.category)
   );
 });
+
+const searchedProducts = computed(() => {
+  if (search.value.length === 0) return filteredProducts.value;
+
+  return filteredProducts.value?.filter((product) =>
+    product.title.toLowerCase().includes(search.value.toLowerCase())
+  );
+});
+
+const search = ref("");
 </script>
 
 <template>
@@ -62,28 +70,42 @@ const filteredProducts = computed(() => {
       </span>
       <template v-else-if="products && categories">
         <div
-          class="flex flex-col gap-y-1 bg-white p-4 rounded border border-slate-200"
+          class="flex flex-col gap-y-4 bg-white p-4 rounded border border-slate-200"
         >
-          <label
-            v-for="category in categories"
-            :key="category"
-            :for="category"
-            class="flex items-center gap-x-1.5"
-          >
-            <input
-              :id="category"
-              v-model="selectedCategories"
-              :value="category"
-              type="checkbox"
+          <div class="flex flex-col gap-y-1">
+            <FormLabel for="search" class="font-bold">Search</FormLabel>
+            <FormInput
+              id="search"
+              v-model="search"
+              type="search"
+              name="search"
+              class-name="w-full"
             />
-            {{ category }}
-          </label>
+          </div>
+          <hr />
+          <div class="flex flex-col gap-y-1">
+            <FormLabel class="font-bold mb-1">Categories</FormLabel>
+            <label
+              v-for="category in categories"
+              :key="category"
+              :for="category"
+              class="flex items-center gap-x-1.5 text-sm"
+            >
+              <input
+                :id="category"
+                v-model="selectedCategories"
+                :value="category"
+                type="checkbox"
+              />
+              {{ formatToTitleCase(category) }}
+            </label>
+          </div>
         </div>
         <div
           class="grid gap-4 grid-cols-[repeat(auto-fit,minmax(400px,1fr))] auto-rows-[400px] col-start-2"
         >
           <article
-            v-for="product in filteredProducts"
+            v-for="product in searchedProducts"
             :key="product.id"
             class="border bg-white border-slate-200 p-8 rounded-lg group hover:border-slate-400 transition-colors relative"
           >

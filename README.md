@@ -3,7 +3,7 @@
 ## Functionalities
 
 - [x] Product Listing
-- [ ] Search
+- [x] Search
 - [x] Filter
 - [x] CRUD
   - [x] Create
@@ -18,10 +18,3 @@
 ## Installation
 
 <!-- todo -->
-
-### Todo
-
-- [ ] create components
-  - [ ] Container
-  - [ ] Product Card
-  - [ ] Panel
