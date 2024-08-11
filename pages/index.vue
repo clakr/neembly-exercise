@@ -31,7 +31,7 @@ const {
             :src="product.image"
             alt=""
             class="rounded aspect-square object-contain bg-center group-hover:scale-105 transition-transform h-full mx-auto"
-          />
+          >
         </NuxtLink>
         <div
           class="absolute bottom-6 left-6 bg-slate-100 border border-slate-200 flex rounded-full max-w-[calc(100%-3rem)] p-1"

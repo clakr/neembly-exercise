@@ -8,7 +8,7 @@
 - [ ] CRUD
   - [ ] Create
   - [x] Read
-  - [ ] Update
+  - [x] Update
   - [x] Delete
 
 ## Project Information
