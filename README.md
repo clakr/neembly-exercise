@@ -5,8 +5,8 @@
 - [x] Product Listing
 - [ ] Search
 - [ ] Filter
-- [ ] CRUD
-  - [ ] Create
+- [x] CRUD
+  - [x] Create
   - [x] Read
   - [x] Update
   - [x] Delete
@@ -21,8 +21,10 @@
 
 ### Todo
 
+- [ ] fix input:number bug
 - [ ] $fetch baseUrl
 - [ ] make new fetch composable
+- [ ] extract Form components
 - [ ] create components
   - [ ] Container
   - [ ] Product Card

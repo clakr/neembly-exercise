@@ -10,38 +10,53 @@ const {
     getCachedData(key, nuxtApp) {
       return nuxtApp.payload.data[key] || nuxtApp.static.data[key];
     },
-  },
+  }
 );
 </script>
 
 <template>
-  <main
-    class="max-w-screen-2xl mx-auto p-4 grid gap-4 grid-cols-[repeat(auto-fit,minmax(400px,1fr))] auto-rows-[400px]"
-  >
-    <span v-if="status === 'pending'">loading...</span>
-    <span v-else-if="status === 'error' && error">{{ error }}</span>
-    <template v-else-if="status === 'success' && products">
-      <article
-        v-for="product in products"
-        :key="product.id"
-        class="border bg-white border-slate-200 p-8 rounded-lg group hover:border-slate-400 transition-colors relative"
+  <main class="max-w-screen-2xl mx-auto p-4 flex flex-col gap-y-2">
+    <NuxtLink
+      to="/products/create"
+      class="bg-slate-800 text-white px-3 py-2 rounded flex items-center gap-x-2 justify-center self-end"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        class="size-6"
       >
-        <NuxtLink :to="`/products/${product.id}`" class="">
-          <img
-            :src="product.image"
-            alt=""
-            class="rounded aspect-square object-contain bg-center group-hover:scale-105 transition-transform h-full mx-auto"
-          >
-        </NuxtLink>
-        <div
-          class="absolute bottom-6 left-6 bg-slate-100 border border-slate-200 flex rounded-full max-w-[calc(100%-3rem)] p-1"
+        <path fill="currentColor" d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z" />
+      </svg>
+      Create Product
+    </NuxtLink>
+    <section
+      class="grid gap-4 grid-cols-[repeat(auto-fit,minmax(400px,1fr))] auto-rows-[400px]"
+    >
+      <span v-if="status === 'pending'">loading...</span>
+      <span v-else-if="status === 'error' && error">{{ error }}</span>
+      <template v-else-if="status === 'success' && products">
+        <article
+          v-for="product in products"
+          :key="product.id"
+          class="border bg-white border-slate-200 p-8 rounded-lg group hover:border-slate-400 transition-colors relative"
         >
-          <h2 class="grid place-content-center px-2 font-medium">
-            {{ product.title }}
-          </h2>
-          <Pill>{{ formatCurrency(product.price) }} USD</Pill>
-        </div>
-      </article>
-    </template>
+          <NuxtLink :to="`/products/${product.id}`" class="">
+            <img
+              :src="product.image"
+              alt=""
+              class="rounded aspect-square object-contain bg-center group-hover:scale-105 transition-transform h-full mx-auto"
+            />
+          </NuxtLink>
+          <div
+            class="absolute bottom-6 left-6 bg-slate-100 border border-slate-200 flex rounded-full max-w-[calc(100%-3rem)] p-1"
+          >
+            <h2 class="grid place-content-center px-2 font-medium">
+              {{ product.title }}
+            </h2>
+            <Pill>{{ formatCurrency(product.price) }} USD</Pill>
+          </div>
+        </article>
+      </template>
+    </section>
   </main>
 </template>
