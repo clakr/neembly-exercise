@@ -18,3 +18,12 @@
 ## Installation
 
 <!-- todo -->
+
+### Todo
+
+- [ ] $fetch baseUrl
+- [ ] make new fetch composable
+- [ ] create components
+  - [ ] Container
+  - [ ] Product Card
+  - [ ] Panel
