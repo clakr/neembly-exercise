@@ -4,7 +4,7 @@
 
 - [x] Product Listing
 - [ ] Search
-- [ ] Filter
+- [x] Filter
 - [x] CRUD
   - [x] Create
   - [x] Read
@@ -21,10 +21,6 @@
 
 ### Todo
 
-- [ ] fix input:number bug
-- [ ] $fetch baseUrl
-- [ ] make new fetch composable
-- [ ] extract Form components
 - [ ] create components
   - [ ] Container
   - [ ] Product Card

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import Textarea from "~/components/Form/Textarea.vue";
+
 const route = useRoute();
 const productId = route.params.id;
 
@@ -6,11 +8,10 @@ const productNuxtKey = `products:${productId}`;
 
 const { data: product } = await useLazyAsyncData<Product>(
   productNuxtKey,
-  () => $fetch(`https://fakestoreapi.com/products/${productId}`),
+  () => client(`/products/${productId}`),
   {
-    getCachedData(key, nuxtApp) {
-      return nuxtApp.payload.data[key] || nuxtApp.static.data[key];
-    },
+    getCachedData: (key, nuxtApp) =>
+      nuxtApp.payload.data[key] || nuxtApp.static.data[key],
   }
 );
 
@@ -20,11 +21,10 @@ const {
   data: categories,
 } = await useLazyAsyncData<Category[]>(
   "categories",
-  () => $fetch("https://fakestoreapi.com/products/categories"),
+  () => client("/products/categories"),
   {
-    getCachedData(key, nuxtApp) {
-      return nuxtApp.payload.data[key] || nuxtApp.static.data[key];
-    },
+    getCachedData: (key, nuxtApp) =>
+      nuxtApp.payload.data[key] || nuxtApp.static.data[key],
   }
 );
 
@@ -33,7 +33,7 @@ async function handleUpdateProduct(event: Event) {
   const data = Object.fromEntries(formData);
 
   // update product server-side
-  await $fetch(`https://fakestoreapi.com/products/${productId}`, {
+  await client(`/products/${productId}`, {
     method: "PUT",
     body: data,
     onResponse() {
@@ -67,35 +67,32 @@ async function handleUpdateProduct(event: Event) {
         class="flex flex-col gap-y-3 bg-white rounded border border-slate-200 p-4"
         @submit.prevent="handleUpdateProduct"
       >
-        <FormField>
-          <FormLabel for="title">Title</FormLabel>
-          <FormInput
-            id="title"
-            type="text"
-            name="title"
-            :value="product.title"
-          />
-        </FormField>
-        <FormField>
-          <FormLabel for="price">Price</FormLabel>
-          <FormInput
+        <Field>
+          <Label for="title">Title</Label>
+          <Input id="title" type="text" name="title" :value="product.title" />
+        </Field>
+        <Field>
+          <Label for="price">Price</Label>
+          <Input
             id="price"
             type="number"
             name="price"
+            step="0.01"
+            min="0.01"
             :value="product.price"
           />
-        </FormField>
-        <FormField>
-          <FormLabel for="description">Description</FormLabel>
-          <FormTextarea
+        </Field>
+        <Field>
+          <Label for="description">Description</Label>
+          <Textarea
             id="description"
             name="description"
             :value="product.description"
           />
-        </FormField>
-        <FormField>
-          <FormLabel for="category">Category</FormLabel>
-          <FormSelect id="category" name="category">
+        </Field>
+        <Field>
+          <Label for="category">Category</Label>
+          <Select id="category" name="category">
             <option
               v-for="category in categories"
               :key="category"
@@ -104,8 +101,8 @@ async function handleUpdateProduct(event: Event) {
             >
               {{ category }}
             </option>
-          </FormSelect>
-        </FormField>
+          </Select>
+        </Field>
         <button class="bg-slate-800 text-slate-50 py-2 rounded mt-2">
           Update Product
         </button>

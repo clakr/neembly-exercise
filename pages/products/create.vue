@@ -5,11 +5,10 @@ const {
   data: categories,
 } = await useLazyAsyncData<Category[]>(
   "categories",
-  () => $fetch("https://fakestoreapi.com/products/categories"),
+  () => client("/products/categories"),
   {
-    getCachedData(key, nuxtApp) {
-      return nuxtApp.payload.data[key] || nuxtApp.static.data[key];
-    },
+    getCachedData: (key, nuxtApp) =>
+      nuxtApp.payload.data[key] || nuxtApp.static.data[key],
   }
 );
 
@@ -18,7 +17,7 @@ async function handleCreateProduct(event: Event) {
   const data = Object.fromEntries(formData);
 
   // create product server-side
-  await $fetch("https://fakestoreapi.com/products", {
+  await client("/products", {
     method: "POST",
     body: data,
     onResponse() {

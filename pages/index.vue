@@ -1,17 +1,37 @@
 <script setup lang="ts">
 const {
-  status,
-  error,
+  status: productsStatus,
+  error: productsError,
   data: products,
-} = await useLazyAsyncData<Product[]>(
-  "products",
-  () => $fetch("https://fakestoreapi.com/products"),
+} = await useLazyAsyncData<Product[]>("products", () => client("/products"), {
+  getCachedData: (key, nuxtApp) =>
+    nuxtApp.payload.data[key] || nuxtApp.static.data[key],
+});
+
+const {
+  status: categoriesStatus,
+  error: categoriesError,
+  data: categories,
+} = await useLazyAsyncData<Category[]>(
+  "categories",
+  () => client("/products/categories"),
   {
-    getCachedData(key, nuxtApp) {
-      return nuxtApp.payload.data[key] || nuxtApp.static.data[key];
-    },
+    getCachedData: (key, nuxtApp) =>
+      nuxtApp.payload.data[key] || nuxtApp.static.data[key],
   }
 );
+
+const selectedCategories = ref<Category[]>([]);
+
+const filteredProducts = computed(() => {
+  if (selectedCategories.value.length === 0) {
+    return products.value;
+  }
+
+  return products.value?.filter((product) =>
+    selectedCategories.value.includes(product.category)
+  );
+});
 </script>
 
 <template>
@@ -29,33 +49,61 @@ const {
       </svg>
       Create Product
     </NuxtLink>
-    <section
-      class="grid gap-4 grid-cols-[repeat(auto-fit,minmax(400px,1fr))] auto-rows-[400px]"
-    >
-      <span v-if="status === 'pending'">loading...</span>
-      <span v-else-if="status === 'error' && error">{{ error }}</span>
-      <template v-else-if="status === 'success' && products">
-        <article
-          v-for="product in products"
-          :key="product.id"
-          class="border bg-white border-slate-200 p-8 rounded-lg group hover:border-slate-400 transition-colors relative"
+    <section class="grid grid-cols-[250px_1fr] gap-x-4">
+      <span
+        v-if="productsStatus === 'pending' && categoriesStatus === 'pending'"
+      >
+        loading...
+      </span>
+      <span
+        v-else-if="productsStatus === 'error' || categoriesStatus === 'error'"
+      >
+        {{ productsError || categoriesError }}
+      </span>
+      <template v-else-if="products && categories">
+        <div
+          class="flex flex-col gap-y-1 bg-white p-4 rounded border border-slate-200"
         >
-          <NuxtLink :to="`/products/${product.id}`" class="">
-            <img
-              :src="product.image"
-              alt=""
-              class="rounded aspect-square object-contain bg-center group-hover:scale-105 transition-transform h-full mx-auto"
-            />
-          </NuxtLink>
-          <div
-            class="absolute bottom-6 left-6 bg-slate-100 border border-slate-200 flex rounded-full max-w-[calc(100%-3rem)] p-1"
+          <label
+            v-for="category in categories"
+            :key="category"
+            :for="category"
+            class="flex items-center gap-x-1.5"
           >
-            <h2 class="grid place-content-center px-2 font-medium">
-              {{ product.title }}
-            </h2>
-            <Pill>{{ formatCurrency(product.price) }} USD</Pill>
-          </div>
-        </article>
+            <input
+              :id="category"
+              v-model="selectedCategories"
+              :value="category"
+              type="checkbox"
+            />
+            {{ category }}
+          </label>
+        </div>
+        <div
+          class="grid gap-4 grid-cols-[repeat(auto-fit,minmax(400px,1fr))] auto-rows-[400px] col-start-2"
+        >
+          <article
+            v-for="product in filteredProducts"
+            :key="product.id"
+            class="border bg-white border-slate-200 p-8 rounded-lg group hover:border-slate-400 transition-colors relative"
+          >
+            <NuxtLink :to="`/products/${product.id}`" class="">
+              <img
+                :src="product.image"
+                alt=""
+                class="rounded aspect-square object-contain bg-center group-hover:scale-105 transition-transform h-full mx-auto"
+              />
+            </NuxtLink>
+            <div
+              class="absolute bottom-6 left-6 bg-slate-100 border border-slate-200 flex rounded-full max-w-[calc(100%-3rem)] p-1"
+            >
+              <h2 class="grid place-content-center px-2 font-medium">
+                {{ product.title }}
+              </h2>
+              <Pill>{{ formatCurrency(product.price) }} USD</Pill>
+            </div>
+          </article>
+        </div>
       </template>
     </section>
   </main>

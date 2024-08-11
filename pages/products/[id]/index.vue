@@ -8,17 +8,16 @@ const {
   data: product,
 } = await useLazyAsyncData<Product>(
   `products:${productId}`,
-  () => $fetch(`https://fakestoreapi.com/products/${productId}`),
+  () => client(`/products/${productId}`),
   {
-    getCachedData(key, nuxtApp) {
-      return nuxtApp.payload.data[key] || nuxtApp.static.data[key];
-    },
+    getCachedData: (key, nuxtApp) =>
+      nuxtApp.payload.data[key] || nuxtApp.static.data[key],
   }
 );
 
 async function handleDeleteProduct() {
   // delete product server-side
-  await $fetch(`https://fakestoreapi.com/products/${productId}`, {
+  await client(`/products/${productId}`, {
     method: "DELETE",
     onResponse() {
       // delete product client-side
